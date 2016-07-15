@@ -1,4 +1,4 @@
-ontract Owned {
+contract Owned {
     address owner;
 
     function Owned() {
@@ -33,7 +33,7 @@ contract Administrated {
 }
 
 
-contract Poll is Owned, Administrated{
+contract PredictionMarket is Owned, Administrated {
 
     event PollClosed();
     event PollOpened();
@@ -117,25 +117,3 @@ contract Poll is Owned, Administrated{
         return true;
     }
 }
-
-B
-B
-A
-A
-A
-A
-A
-A
-A
-A
-A
-B
-B
-B
-B
-B
-B
-B
-B
-B
-
