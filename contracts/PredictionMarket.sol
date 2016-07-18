@@ -25,21 +25,25 @@ contract Administrated {
     uint adminCount;
     
     function Administrated() {
-        addAdmin(msg.sender);
+        _addAdmin(msg.sender);
     }
     
     modifier onlyAdmins() {
         if (!isAdmin[msg.sender]) throw;
         _
     }
-    
-    function addAdmin(address newAdmin) onlyAdmins returns(bool success) {
+
+    function _addAdmin(address newAdmin) private returns(bool success) {
         if (msg.value > 0) throw;
         if (isAdmin[newAdmin]) return false;
         isAdmin[newAdmin] = true;
         adminCount++;
         AdminAdded(newAdmin);
         return true;
+    }
+
+    function addAdmin(address newAdmin) onlyAdmins returns(bool success) {
+        return _addAdmin(newAdmin);
     }
     
     function removeAdmin(address curAdmin) onlyAdmins returns(bool success) {
