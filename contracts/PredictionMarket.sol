@@ -1,6 +1,6 @@
 contract Owned {
     event OwnerChanged(address newOwner);
-    address owner;
+    address public owner;
 
     function Owned() {
         owner = msg.sender;
@@ -83,7 +83,7 @@ contract PredictionMarket is Owned, Administrated {
         mapping(address => Bet) bets;
     }
 
-    YesNoQuestion poll;
+    YesNoQuestion public poll;
     
     function PredictionMarket() Owned() Administrated() {
     }
