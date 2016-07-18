@@ -21,7 +21,7 @@ contract Administrated {
     event AdminAdded(address newAdmin);
     event AdminRemoved(address removedAdmin);
     
-    mapping(address => bool) isAdmin;
+    mapping(address => bool) public isAdmin;
     uint adminCount;
     
     function Administrated() {
@@ -128,7 +128,7 @@ contract PredictionMarket is Owned, Administrated {
     function openNewPoll(string question, address trustedSource, uint closingDate) onlyAdmins closedPoll noMsgValue returns (bool success) {
         if (poll.closingDate + payoutCollectionWindow > now ) throw;
         createNewPoll(question, trustedSource, closingDate);
-        // cloud xfer any contract balance to the owner here,
+        // could xfer any contract balance to the owner here,
         // instead let it roll into the next poll payout.
         // Otherwise an enterprising admin could start a poll
         // with themselves as the trustedsource close it then 

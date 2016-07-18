@@ -14,8 +14,7 @@ module.exports = {
   ],
   rpc: {
     host: "192.168.1.16",
-    port: 8546
-  , gas: 1111115141592
+    port: 8545
   }
   ,networks:{
     "live": {
