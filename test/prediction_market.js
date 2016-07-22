@@ -103,6 +103,52 @@ contract( 'PredictionMarket', function ( accounts ) {
 
 } );
 
+contract( 'PredictionMarket', function ( accounts ) {
+
+  var newDeployedPoll;
+
+  before(function ( done ) {
+    PredictionMarket.new().then(function ( instance ) {
+      newDeployedPoll = instance;
+    }).then(done).catch(done);
+  });
+
+  it('should bet for', function (  done ) {
+    var pm = newDeployedPoll;
+
+    var watch = pm.PredictionUpdate({},[], function ( error, event ) {
+      if(error) done(error);
+      console.log( 'should bet for PredictionUpdate event' );
+      console.log( event );
+      assert.equal('1', event.args.totalYes.toString());
+      assert.equal('0', event.args.totalNo.toString());
+      watch.stopWatching();
+      done();
+    });
+
+    pm.openNewPoll( 'does it blend?', accounts[0], Date.now()).then( function ( tx ) {
+      return pm.betFor({value: 1}).then(function ( tx ) {
+      });
+    }).catch(done);
+  });
+
+  it('should bet against', function (  done ) {
+    var pm = newDeployedPoll;
+
+    var watch = pm.PredictionUpdate({},[], function ( error, event ) {
+      if(error) done(error);
+      console.log( 'should bet against PredictionUpdate event' );
+      console.log( event );
+      assert.equal('1', event.args.totalYes.toString());
+      assert.equal('1', event.args.totalNo.toString());
+      watch.stopWatching();
+      done();
+    });
+
+    pm.betAgainst({value: 1}).then(function ( tx ) {
+    }).catch(done);
+  });
+});
 
 contract( 'PredictionMarket', function ( accounts ) {
 
