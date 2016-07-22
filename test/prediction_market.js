@@ -15,7 +15,7 @@ var PollStruct = {
 };
 
 contract( 'PredictionMarket', function ( accounts ) {
-  it( "should create a new poll", function ( done ) {
+  it( 'should create a new poll', function ( done ) {
     var pm            = PredictionMarket.deployed();
     var question      = 'Does it blend?';
     var trustedSource = accounts[0];
@@ -56,7 +56,7 @@ contract( 'PredictionMarket', function ( accounts ) {
   } );
 
   /*order matter here the test follow the previous open poll*/
-  it( "should let trusted source close poll", function ( done ) {
+  it( 'should let trusted source close poll', function ( done ) {
     var pm       = PredictionMarket.deployed();
 
     pm.PollClosed( {}, [], function ( error, event ) {
@@ -71,7 +71,7 @@ contract( 'PredictionMarket', function ( accounts ) {
 
   } );
 
-  it.skip( "should close expired poll", function ( done ) {
+  it.skip( 'should close expired poll', function ( done ) { //todo start a new poll to close
     var pm       = PredictionMarket.deployed();
     var question = 'Does it blend?';
 
