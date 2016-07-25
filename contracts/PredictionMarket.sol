@@ -61,9 +61,9 @@ contract PredictionMarket is Owned, Administrated {
     event PollClosed();
     event PollOpened();
     event PredictionUpdate(uint totalYes, uint totalNo);
-    event PaidOut(address recipient);
+    event PaidOut(address recipient, uint amount);
 
-    uint constant payoutCollectionWindow = 1 days;
+    event Debug(string message, address msgSender, uint aValue);
 
     struct Bet {
         uint yes;
@@ -85,8 +85,7 @@ contract PredictionMarket is Owned, Administrated {
 
     YesNoQuestion public poll;
     
-    function PredictionMarket() Owned() Administrated() {
-    }
+    function PredictionMarket() Owned() Administrated() {}
     
     function createNewPoll(
     string question
@@ -126,13 +125,8 @@ contract PredictionMarket is Owned, Administrated {
     }
     
     function openNewPoll(string question, address trustedSource, uint closingDate) onlyAdmins closedPoll noMsgValue returns (bool success) {
-        if (poll.closingDate + payoutCollectionWindow > now ) throw;
+        if (poll.closingDate > 0 ) throw; //contract can only be used for 1 poll
         createNewPoll(question, trustedSource, closingDate);
-        // could xfer any contract balance to the owner here,
-        // instead let it roll into the next poll payout.
-        // Otherwise an enterprising admin could start a poll
-        // with themselves as the trustedsource close it then 
-        // collect the contracts outstanding balance.
         PollOpened();
         return true;
     }
@@ -157,15 +151,11 @@ contract PredictionMarket is Owned, Administrated {
 
         address recipient = msg.sender;
         Bet bet = poll.bets[recipient];
-        uint percentageOfPot = poll.result
-            ? bet.yes / totalBets
-            : bet.no / totalBets;
-        if (percentageOfPot > 1) throw;
-        // This is how the mapping is cleaned up in the poll struct
-        bet.yes = 0;
-        bet.no = 0;
-        var payout = poll.closingBalance * percentageOfPot;
-        // Handle divsion and multiplication rounding errors.
+        // Debug("bet yes", msg.sender, bet.yes);
+        // Debug("bet no", msg.sender, bet.no);
+        uint payout = ( poll.closingBalance *  (poll.result ? bet.yes : bet.no) )
+                                        / totalBets;
+        // Handle division and multiplication rounding errors.
         // Sucks a little bit to be the last person to collect
         if (payout > this.balance) {
             payout = this.balance;
@@ -173,7 +163,7 @@ contract PredictionMarket is Owned, Administrated {
         
         if (!recipient.send(payout)) throw;
 
-        PaidOut(recipient);
+        PaidOut(recipient, payout);
         return true;
     }
     
@@ -200,8 +190,11 @@ contract PredictionMarket is Owned, Administrated {
         throw;
     }
 
-    function kill() onlyOwner closedPoll returns (bool success) { 
-        selfdestruct(owner); //should actually refund bets
+    function kill() onlyOwner closedPoll returns (bool success) {
+        // should preferably:
+        // - refund bets if poll is opened.
+        // - owner collects if the poll has been closed for a long period of time
+        selfdestruct(owner);
         return true;
     } 
 }
