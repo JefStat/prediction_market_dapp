@@ -79,6 +79,7 @@ contract( 'PredictionMarket', function ( accounts ) {
     var closingDate = Date.now() - 7 * 24 * 60 * 60 * 1000;
     PredictionMarket.new().then( function ( instance ) {
       var pm    = instance;
+      debugEventLogger( pm );
       var watch = pm.PollClosed( {}, [], function ( error, event ) {
         if ( error ) done( error );
         console.log( 'PollClosed event' );
@@ -95,6 +96,7 @@ contract( 'PredictionMarket', function ( accounts ) {
 
         pm.poll.call().then( function ( poll ) {
           var pollObj = PollStruct.newPollStruct( poll );
+          console.log( 'Poll object ' );
           console.log( pollObj );
           assert.equal( '' + closingDate, pollObj.closingDate.toString(), 'closing date wrong' );
           assert.equal( true, pollObj.closingDate.lessThan( Date.now() ), 'poll is not expired' );
@@ -255,6 +257,7 @@ contract( 'PredictionMarket', function ( accounts ) {
 
 var debugEventLogger = function ( instance, onlyOnce ) {
   var debugWatch = instance.Debug( {}, [], function ( error, event ) {
+    console.log( 'debug event' );
     console.log( event );
     if ( onlyOnce ) {
       debugWatch.stopWatching();
