@@ -1,12 +1,12 @@
 module.exports = {
   build: {
     "index.html": "index.html",
-    "app.js": [
-      "javascripts/app.js"
-    ],
     "predictionMarket.js": [
       "javascripts/_vendor/angular.js",
-      "javascripts/predictionMarketController.js"
+      "javascripts/predictionMarketController.js",
+      "build/contracts/PredictionMarket.sol.js",
+      "build/contracts/Owned.sol.js",
+      "build/contracts/Administrated.sol.js"
     ],
     "app.css": [
       "stylesheets/app.css"
