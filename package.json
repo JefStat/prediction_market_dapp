@@ -1,0 +1,25 @@
+{
+  "name": "prediction_market_dapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JefStat/prediction_market_dapp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JefStat/prediction_market_dapp/issues"
+  },
+  "homepage": "https://github.com/JefStat/prediction_market_dapp#readme",
+  "dependencies": {
+    "hooked-web3-provider": "^1.0.0"
+  }
+}
