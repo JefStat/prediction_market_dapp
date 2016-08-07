@@ -4,6 +4,10 @@ module.exports = {
     "app.js": [
       "javascripts/app.js"
     ],
+    "predictionMarket.js": [
+      "javascripts/_vendor/angular.js",
+      "javascripts/predictionMarketController.js"
+    ],
     "app.css": [
       "stylesheets/app.css"
     ],
