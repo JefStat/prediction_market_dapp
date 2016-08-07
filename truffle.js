@@ -3,10 +3,7 @@ module.exports = {
     "index.html": "index.html",
     "predictionMarket.js": [
       "javascripts/_vendor/angular.js",
-      "javascripts/predictionMarketController.js",
-      "../build/contracts/PredictionMarket.sol.js",
-      "../build/contracts/Owned.sol.js",
-      "../build/contracts/Administrated.sol.js"
+      "javascripts/predictionMarketController.js"
     ],
     "app.css": [
       "stylesheets/app.css"
