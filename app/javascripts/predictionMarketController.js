@@ -18,24 +18,24 @@ var PollStruct = {
     };
   }
 };
-
+//0xa5d034f335da0fd237d557fdb783f75052a451e5
 
 app.controller( "predictionMarketController", ['$scope', '$location', '$http', '$q', '$window', '$timeout', function ( $scope, $location, $http, $q, $window, $timeout ) {
   $scope.pm          = PredictionMarket.deployed();
   $scope.currentPoll = {
-    question        : ''
+    question        : 'Does it blend?'
     , totalYes      : 0
     , totalNo       : 0
     , open          : false
     , result        : null
-    , closingDate   : null
+    , closingDate   : Date.now()
     , closingBalance: null
     , trustedSource : ''
   };
   $scope.pm.poll.call().then( function ( poll ) {
     $scope.currentPoll = PollStruct.newPollStruct( poll );
   } );
-
+  $scope.from = web3.eth.accounts[0];
 
   // Event watches
   var debugWatch            = $scope.pm.Debug( {}, [], function ( error, event ) {
@@ -89,27 +89,42 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
 // pm.owner.call().then( function ( owner ) {});
 
 // Transactions
-  $scope.openPoll = function ( question, trustedSource, closingDate ) {
-    $scope.pm.openNewPoll( question, trustedSource, closingDate ).then( function ( tx ) {
-      console.log( '[openPoll]  tx: ', tx );
-    } );
+  $scope.openPoll = function ( question, trustedSource, closingDate, from ) {
+    $scope.pm.openNewPoll( question, trustedSource, closingDate.valueOf(), { from: from } )
+          .then( function ( tx ) {
+            console.log( '[openPoll]  tx: ', tx );
+          } )
+          .catch( function ( err ) {
+            console.error( '[openPoll] error', err );
+          } );
   };
 
-  $scope.closePoll = function ( pollResult ) {
-    $scope.pm.closePoll( pollResult ).then( function ( tx ) {
-      console.log( '[closePoll]  tx: ', tx );
-    } );
+  $scope.closePoll = function ( pollResult, from ) {
+    $scope.pm.closePoll( pollResult, { from: from } )
+          .then( function ( tx ) {
+            console.log( '[closePoll]  tx: ', tx );
+          } )
+          .catch( function ( err ) {
+            console.error( '[closePoll] error ', err );
+          } );
   };
 
-  $scope.betFor     = function ( betValue ) {
-    $scope.pm.betFor( { value: betValue } ).then( function ( tx ) {
-      console.log( '[betFor]  tx: ', tx );
-    } );
+  $scope.betFor     = function ( betValue, from ) {
+    $scope.pm.betFor( { value: betValue, from: from } )
+          .then( function ( tx ) {
+            console.log( '[betFor]  tx: ', tx );
+          } )
+          .catch( function ( err ) {
+            console.error( '[betFor] error', err );
+          } );
   };
-  $scope.betAgainst = function ( betValue ) {
-    $scope.pm.betAgainst( { value: betValue } ).then( function ( tx ) {
-      console.log( '[betAgainst]  tx: ', tx );
-    } );
+  $scope.betAgainst = function ( betValue, from ) {
+    $scope.pm.betAgainst( { value: betValue, from: from } )
+          .then( function ( tx ) {
+            console.log( '[betAgainst]  tx: ', tx );
+          } )
+          .catch( function ( err ) {
+            console.error( '[betAgainst] error', err );
+          } );
   };
-
 }] );
