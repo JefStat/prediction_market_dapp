@@ -1,6 +1,9 @@
 module.exports = {
   build: {
     "index.html": "index.html",
+    "app.js" : [
+      "javascripts/app.js"
+    ],
     "predictionMarket.js": [
       "javascripts/_vendor/angular.js",
       "javascripts/predictionMarketController.js"
@@ -10,12 +13,9 @@ module.exports = {
     ],
     "images/": "images/"
   },
-  deploy: [
-    "PredictionMarket"
-  ],
   rpc: {
     host: "192.168.1.16",
-    port: 8545
+    port: 8546
   }
   ,networks:{
     "live": {
