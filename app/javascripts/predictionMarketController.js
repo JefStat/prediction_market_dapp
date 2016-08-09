@@ -49,6 +49,7 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
     console.log( '[PollOpened] ', event );
     $scope.pm.poll.call().then( function ( poll ) {
       $scope.currentPoll = PollStruct.newPollStruct( poll );
+      $scope.$apply();
     } );
   } );
   var pollClosedWatch       = $scope.pm.PollClosed( {}, [], function ( error, event ) {
@@ -59,6 +60,7 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
     console.log( '[PollClosed]  ', event );
     $scope.pm.poll.call().then( function ( poll ) {
       $scope.currentPoll = PollStruct.newPollStruct( poll );
+      $scope.$apply();
     } );
   } );
   var predictionUpdateWatch = $scope.pm.PredictionUpdate( {}, [], function ( error, event ) {
@@ -69,6 +71,7 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
     console.log( '[PredictionUpdate]  ', event );
     $scope.pm.poll.call().then( function ( poll ) {
       $scope.currentPoll = PollStruct.newPollStruct( poll );
+      $scope.$apply();
     } );
   } );
 
@@ -127,4 +130,6 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
             console.error( '[betAgainst] error', err );
           } );
   };
+//TODO add pay out action
+  $scope.$apply();
 }] );
