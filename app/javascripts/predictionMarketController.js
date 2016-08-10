@@ -108,6 +108,7 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
           } )
           .finally( function () {
             $scope.openingPoll = false;
+            $scope.$apply();
           } );
   };
 
@@ -122,6 +123,7 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
           } )
           .finally( function () {
             $scope.closingPoll = false;
+            $scope.$apply();
           } );
   };
 
@@ -136,6 +138,7 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
           } )
           .finally( function () {
             $scope.betting = false;
+            $scope.$apply();
           } );
   };
   $scope.betAgainst = function ( betValue, from ) {
@@ -149,6 +152,7 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
           } )
           .finally( function () {
             $scope.betting = false;
+            $scope.$apply();
           } );
   };
 //TODO add pay out action
