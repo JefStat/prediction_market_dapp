@@ -13,32 +13,29 @@
 <body ng-app="predictionMarketApp" ng-controller="predictionMarketController">
 <input type="text" id="from" ng-model="from" placeholder="from Address "/>
 
-<div style="{height: 10px; background: beige}"></div>
-
-<input type="text" ng-disabled="openingPoll" ng-hide="currentPoll.open" id="question" ng-model="question"
+<input type="text" ng-hide="currentPoll.open || currentPoll.finished" id="question" ng-model="question"
        placeholder="e.g. Does it blend?"/>
-<input type="text" ng-disabled="openingPoll" ng-hide="currentPoll.open" id="trusted_source" ng-model="trustedSource"
+<input type="text" ng-hide="currentPoll.open || currentPoll.finished" id="trusted_source" ng-model="trustedSource"
        placeholder="trusted source address"/>
-<input type="date" ng-disabled="openingPoll" ng-hide="currentPoll.open" id="closing_date" ng-model="closingDate"
+<input type="date" ng-hide="currentPoll.open || currentPoll.finished" id="closing_date" ng-model="closingDate"
        placeholder="yyyy-MM-dd"/>
-<button id="open_poll" ng-disabled="openingPoll" ng-hide="currentPoll.open"
-        ng-click="openPoll(question, trustedSource, closingDate, from)">Open
-    Poll
+<button id="open_poll" ng-hide="currentPoll.open || currentPoll.finished"
+        ng-click="openPoll(question, trustedSource, closingDate, from)">Open Poll
 </button>
 
-<select ng-model="pollResult" ng-disabled="closingPoll" ng-show="currentPoll.open">
+<select ng-model="pollResult" ng-show="currentPoll.open && !currentPoll.finished">
     <option value="false">True</option>
     <option value="true">False</option>
 </select>
-<button id="close_poll" ng-disabled="closingPoll" ng-click="closePoll(pollResult,from)" ng-show="currentPoll.open">Close
+<button id="close_poll" ng-click="closePoll(pollResult,from)" ng-show="currentPoll.open && !currentPoll.finished">Close
     Poll
 </button>
 
 
-<input type="number" ng-disabled="betting" id="bet_value" ng-model="betValue" placeholder="wei amount to bet"
-       ng-show="currentPoll.open">
-<button id="bet_for" ng-disabled="betting" ng-click="betFor(betValue, from)" ng-show="currentPoll.open">Bet For</button>
-<button id="bet_against" ng-disabled="betting" ng-click="betAgainst(betValue, from)" ng-show="currentPoll.open">Bet
+<input type="number" id="bet_value" ng-model="betValue" placeholder="wei amount to bet" ng-show="currentPoll.open">
+<button id="bet_for" ng-click="betFor(betValue, from)" ng-show="currentPoll.open && !currentPoll.finished">Bet For
+</button>
+<button id="bet_against" ng-click="betAgainst(betValue, from)" ng-show="currentPoll.open && !currentPoll.finished">Bet
     Against
 </button>
 
