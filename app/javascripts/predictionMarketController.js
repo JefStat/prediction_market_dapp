@@ -18,8 +18,7 @@ var PollStruct = {
     };
   }
 };
-//0xa5d034f335da0fd237d557fdb783f75052a451e5
-
+// TODO convert closing date into a date string from mills epoch
 app.controller( "predictionMarketController", ['$scope', '$location', '$http', '$q', '$window', '$timeout', function ( $scope, $location, $http, $q, $window, $timeout ) {
   $scope.pm          = PredictionMarket.deployed();
   $scope.currentPoll = {
@@ -93,41 +92,57 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
 
 // Transactions
   $scope.openPoll = function ( question, trustedSource, closingDate, from ) {
+    $scope.openingPoll = true;
     $scope.pm.openNewPoll( question, trustedSource, closingDate.valueOf(), { from: from } )
           .then( function ( tx ) {
             console.log( '[openPoll]  tx: ', tx );
           } )
           .catch( function ( err ) {
             console.error( '[openPoll] error', err );
+          } )
+          .finally( function () {
+            $scope.openingPoll = false;
           } );
   };
 
   $scope.closePoll = function ( pollResult, from ) {
+    $scope.closingPoll = true;
     $scope.pm.closePoll( pollResult, { from: from } )
           .then( function ( tx ) {
             console.log( '[closePoll]  tx: ', tx );
           } )
           .catch( function ( err ) {
             console.error( '[closePoll] error ', err );
+          } )
+          .finally( function () {
+            $scope.closingPoll = false;
           } );
   };
 
   $scope.betFor     = function ( betValue, from ) {
+    $scope.betting = true;
     $scope.pm.betFor( { value: betValue, from: from } )
           .then( function ( tx ) {
             console.log( '[betFor]  tx: ', tx );
           } )
           .catch( function ( err ) {
             console.error( '[betFor] error', err );
+          } )
+          .finally( function () {
+            $scope.betting = false;
           } );
   };
   $scope.betAgainst = function ( betValue, from ) {
+    $scope.betting = true;
     $scope.pm.betAgainst( { value: betValue, from: from } )
           .then( function ( tx ) {
             console.log( '[betAgainst]  tx: ', tx );
           } )
           .catch( function ( err ) {
             console.error( '[betAgainst] error', err );
+          } )
+          .finally( function () {
+            $scope.betting = false;
           } );
   };
 //TODO add pay out action
