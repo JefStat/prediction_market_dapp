@@ -15,6 +15,7 @@ var PollStruct = {
       , closingDate   : truffleArray[5]
       , closingBalance: truffleArray[6]
       , trustedSource : truffleArray[7]
+      , finished      : truffleArray[8]
     };
   }
 };
@@ -30,6 +31,7 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
     , closingDate   : Date.now()
     , closingBalance: null
     , trustedSource : ''
+    , finished      : false
   };
   $scope.pm.poll.call().then( function ( poll ) {
     $scope.currentPoll = PollStruct.newPollStruct( poll );
@@ -92,6 +94,10 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
 
 // Transactions
   $scope.openPoll = function ( question, trustedSource, closingDate, from ) {
+    if (!closingDate || question == '' || trustedSource == ''){
+      console.error('missing parameters for open poll');
+      return;
+    }
     $scope.openingPoll = true;
     $scope.pm.openNewPoll( question, trustedSource, closingDate.valueOf(), { from: from } )
           .then( function ( tx ) {
@@ -146,5 +152,4 @@ app.controller( "predictionMarketController", ['$scope', '$location', '$http', '
           } );
   };
 //TODO add pay out action
-  $scope.$apply();
 }] );

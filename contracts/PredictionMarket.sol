@@ -25,6 +25,7 @@ contract PredictionMarket is Owned, Administrated {
         uint closingDate;
         uint closingBalance;
         address trustedSource;
+        bool finished;
         mapping(address => Bet) bets;
     }
 
@@ -45,7 +46,8 @@ contract PredictionMarket is Owned, Administrated {
             result: false,
             closingDate: closingDate,
             closingBalance: 0,
-            trustedSource: trustedSource
+            trustedSource: trustedSource,
+            finished: false
         });
     }
     
@@ -70,7 +72,7 @@ contract PredictionMarket is Owned, Administrated {
     }
     
     function openNewPoll(string question, address trustedSource, uint closingDate) onlyAdmins closedPoll noMsgValue returns (bool success) {
-        if (poll.closingDate > 0 ) throw; //contract can only be used for 1 poll
+        if ( poll.finished ) throw; //contract can only be used for 1 poll
         createNewPoll(question, trustedSource, closingDate);
         PollOpened();
         return true;
@@ -83,6 +85,7 @@ contract PredictionMarket is Owned, Administrated {
             poll.open = false;
             poll.closingDate = now;
             poll.closingBalance = this.balance;
+            poll.finished = true;
             PollClosed();
             return true;
         }

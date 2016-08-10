@@ -9,6 +9,7 @@ var PollStruct = {
       , closingDate   : truffleArray[5]
       , closingBalance: truffleArray[6]
       , trustedSource : truffleArray[7]
+      , finished      : truffleArray[8]
     };
   }
 };
@@ -50,6 +51,7 @@ contract( 'PredictionMarket', function ( accounts ) {
         assert.equal( '' + closingDate, pollObj.closingDate.toString(), 'closing date wrong' );
         assert.equal( '0', pollObj.totalNo, 'closing balance wrong' );
         assert.equal( trustedSource, pollObj.trustedSource.toString(), 'trusted source wrong' );
+        assert.equal( false, pollObj.finished );
 
       } );
     } ).catch( done );
@@ -78,7 +80,7 @@ contract( 'PredictionMarket', function ( accounts ) {
     var question    = 'Does it blend?';
     var closingDate = Date.now() - 7 * 24 * 60 * 60 * 1000;
     PredictionMarket.new().then( function ( instance ) {
-      var pm    = instance;
+      var pm = instance;
       debugEventLogger( pm );
       var watch = pm.PollClosed( {}, [], function ( error, event ) {
         if ( error ) done( error );
@@ -174,7 +176,7 @@ contract( 'PredictionMarket', function ( accounts ) {
   } );
 
   it( 'should pay out', function ( done ) {
-    var pm = newDeployedPoll;
+    var pm    = newDeployedPoll;
     //debugEventLogger( pm );
     var watch = pm.PaidOut( {}, [], function ( error, event ) {
       if ( error ) done( error );
@@ -183,14 +185,14 @@ contract( 'PredictionMarket', function ( accounts ) {
 
       pm.poll.call().then( function ( poll ) {
         var pollObj = PollStruct.newPollStruct( poll );
-        console.log('Poll state');
-        console.log(pollObj);
+        console.log( 'Poll state' );
+        console.log( pollObj );
 
         assert.equal( accounts[0], event.args.recipient.toString() );
         assert.equal( '1', event.args.amount.toString() );
         watch.stopWatching();
         done();
-      });
+      } );
     } );
     pm.closePoll( true ).then( function ( tx ) {
       return pm.payOut();
